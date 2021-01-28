@@ -1,0 +1,23 @@
+Setting Up the project:
+open the project folder in vs code 
+open a terminal in vs code 
+npm init -y 
+code -r index.js (creates new file)
+code -r .gitignore 
+git init (initializes a new git repository)
+npm install apollo-server graphql mongoose
+
+node index to run the apollo-server 
+
+use nodemon in script to dynamically update server 
+
+use bcrypt to encrypt passwords 
+use jsonwebtoken to hash information and send it to the user 
+
+
+npx create-react-app client //to create a react app
+cd client 
+
+in client use @apollo/client to connect graphQL to client 
+
+ 

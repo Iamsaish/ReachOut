@@ -1,0 +1,471 @@
+GraphQL database and server testing: 
+
+1. Testing getPosts: 
+
+Input: 	
+	query{
+ 	 getPosts{
+   		 id
+  		 body
+    		 username
+   		 createdAt
+ 		 }
+       	       } 
+Output: 
+
+{
+  "data": {
+    "getPosts": [
+      {
+        "id": "5fcf138a6da4cbb42cf8d1f5",
+        "body": "This is a sample post",
+        "username": "User1",
+        "createdAt": "sdfdfdfdfsdf"
+      }
+    ]
+  }
+}
+
+Result: Test successful
+
+2. Testing Registration: 
+
+a. For a new user 
+
+input: 
+mutation{
+  register(registerInput:{
+    username: "csasczc"
+    password: "123456"
+    confirmpassword: "123456"
+    email: "user@email.com"
+  }){
+    id
+    email
+    token 
+    username 
+    createdAt
+  }
+}
+
+Output: 
+
+{
+  "data": {
+    "register": {
+      "id": "5fd30f90ff93682a8887f74d",
+      "email": "user@email.com",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZDMwZjkwZmY5MzY4MmE4ODg3Zjc0ZCIsImVtYWlsIjoidXNlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImNzYXNjemMiLCJpYXQiOjE2MDc2Njc2MDAsImV4cCI6MTYwNzY3MTIwMH0.qGtMXZZgzDD0qdypRFQJWfJOChgbuhrVTNLHjdT_x9M",
+      "username": "csasczc",
+      "createdAt": "2020-12-11T06:20:00.351Z"
+    }
+  }
+}
+
+Result: Test successful, new user created, password has been hashed and entry stored in database.
+
+b.For existing user (username check)
+
+input: 
+
+mutation{
+  register(registerInput:{
+    username: "csasczc"
+    password: "123456"
+    confirmpassword: "123456"
+    email: "user@email.com"
+  }){
+    id
+    email
+    token 
+    username 
+    createdAt
+  }
+}
+
+Output: 
+
+{
+  "errors": [
+    {
+      "message": "Username is taken",
+      "locations": [
+        {
+          "line": 2,
+          "column": 3
+        }
+      ],
+      "path": [
+        "register"
+      ],
+      "extensions": {
+        "errors": {
+          "username": "Username is already taken"
+        },
+        "code": "BAD_USER_INPUT",
+        "exception": {
+          "errors": {
+            "username": "Username is already taken"
+          },
+          "stacktrace": [
+            "UserInputError: Username is taken",
+            "    at register (G:\\reach-out\\MERNG-Reach-Out\\graphql\\resolvers\\users.js:58:23)",
+            "    at processTicksAndRejections (internal/process/task_queues.js:93:5)"
+          ]
+        }
+      }
+    }
+  ],
+  "data": null
+}
+
+Result: Test successful, prevents the user to take the same username 
+
+c. for existing user (email check)
+
+input: 
+
+mutation{
+  register(registerInput:{
+    username: "casczc"
+    password: "123456"
+    confirmpassword: "123456"
+    email: "user@email.com"
+  }){
+    id
+    email
+    token 
+    username 
+    createdAt
+  }
+}
+
+
+Output: 
+{
+  "errors": [
+    {
+      "message": "Email is already taken",
+      "locations": [
+        {
+          "line": 2,
+          "column": 3
+        }
+      ],
+      "path": [
+        "register"
+      ],
+      "extensions": {
+        "errors": {
+          "email": "Email is taken"
+        },
+        "code": "BAD_USER_INPUT",
+        "exception": {
+          "errors": {
+            "email": "Email is taken"
+          },
+          "stacktrace": [
+            "UserInputError: Email is already taken",
+            "    at register (G:\\reach-out\\MERNG-Reach-Out\\graphql\\resolvers\\users.js:67:23)",
+            "    at processTicksAndRejections (internal/process/task_queues.js:93:5)"
+          ]
+        }
+      }
+    }
+  ],
+  "data": null
+}
+
+
+Result: Test successful, prevents the user to take the existing email
+
+3. Login Testing: 
+
+a. For correct username and password
+
+Input:
+mutation{
+  login (username: "User1", password:"123456"){
+    id
+    email
+    token
+    username
+    createdAt
+  }
+}
+
+Output: 
+{
+  "data": {
+    "login": {
+      "id": "5fcf27646dc86527c82afb48",
+      "email": "user@email.com",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2YyNzY0NmRjODY1MjdjODJhZmI0OCIsImVtYWlsIjoidXNlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6IlVzZXIxIiwiaWF0IjoxNjA3NjY4NDA2LCJleHAiOjE2MDc2NzIwMDZ9.zpKIr_lKWbUiTquBBRQNCTsNcuXt8dNpWVqKizntFXI",
+      "username": "User1",
+      "createdAt": "2020-12-08T07:12:36.843Z"
+    }
+  }
+}
+
+Result: User created successfully and stored in database.
+
+b. for incorrect username 
+
+Input: 
+mutation{
+  login (username: "ser1", password:"123456"){
+    id
+    email
+    token
+    username
+    createdAt
+  }
+}
+
+Output: 
+
+{
+  "errors": [
+    {
+      "message": "User not found",
+      "locations": [
+        {
+          "line": 2,
+          "column": 3
+        }
+      ],
+      "path": [
+        "login"
+      ],
+      "extensions": {
+        "errors": {
+          "general": "User not found"
+        },
+        "code": "BAD_USER_INPUT",
+        "exception": {
+          "errors": {
+            "general": "User not found"
+          },
+          "stacktrace": [
+            "UserInputError: User not found",
+            "    at login (G:\\reach-out\\MERNG-Reach-Out\\graphql\\resolvers\\users.js:29:23)",
+            "    at processTicksAndRejections (internal/process/task_queues.js:93:5)"
+          ]
+        }
+      }
+    }
+  ],
+  "data": null
+}
+
+Result: Testing successful 
+
+c. for incorrect password 
+
+Input: 
+
+mutation{
+  login (username: "User1", password:"12345"){
+    id
+    email
+    token
+    username
+    createdAt
+  }
+}
+
+Output: 
+
+{
+  "errors": [
+    {
+      "message": "Wrong Credentials",
+      "locations": [
+        {
+          "line": 2,
+          "column": 3
+        }
+      ],
+      "path": [
+        "login"
+      ],
+      "extensions": {
+        "errors": {
+          "general": "Wrong Credentials"
+        },
+        "code": "BAD_USER_INPUT",
+        "exception": {
+          "errors": {
+            "general": "Wrong Credentials"
+          },
+          "stacktrace": [
+            "UserInputError: Wrong Credentials",
+            "    at login (G:\\reach-out\\MERNG-Reach-Out\\graphql\\resolvers\\users.js:35:23)"
+          ]
+        }
+      }
+    }
+  ],
+  "data": null
+}
+
+Result: Testing successful
+
+
+4. Create post testing 
+
+a. Creating post with invalid user token including bearer 
+
+Input: 
+
+mutation {
+createPost (body: "This is another post"){
+    id
+    body
+    username
+    createdAt
+  }
+}
+
+Http: 
+{
+  "Authorization": "Bearer adsadasdasd"
+}
+
+Output: 
+{
+  "errors": [
+    {
+      "message": "Invalid/ Expired token",
+      "locations": [
+        {.....}
+Result: Test succesful
+
+b. creating user post with invalid user excluding bearer 
+
+Input: 
+
+mutation {
+createPost (body: "This is another post"){
+    id
+    body
+    username
+    createdAt
+  }
+}
+
+Http: 
+{
+  "Authorization": "adsadasdasd"
+}
+
+
+Output: 
+
+{
+  "errors": [
+    {
+      "message": "Authentication token must be 'Bearer[token]",
+      "locations": [
+        {
+
+Result: Successful 
+
+c. Invalid user with no auth 
+
+Input: 
+
+mutation {
+	  createPost (body: "This is another post"){
+    id
+    body
+    username
+    createdAt
+  }
+}
+
+Output:
+
+{
+  "errors": [
+    {
+      "message": "Authorization header must be provided",
+      "locations": [....]
+
+Result: Test successful
+
+d. Valid user 
+
+Input: 
+
+mutation {
+	  createPost (body: "This is another post"){
+    id
+    body
+    username
+    createdAt
+  }
+}
+
+Http: 
+
+{
+  "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2YyNzY0NmRjODY1MjdjODJhZmI0OCIsImVtYWlsIjoidXNlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6IlVzZXIxIiwiaWF0IjoxNjA3NjcyMjA3LCJleHAiOjE2MDc2NzU4MDd9.u8emWDU2efSTzKa3komtUdlmkRcD5K5jjkoDsFK2UqE"
+}
+
+Output: 
+
+{
+  "data": {
+    "createPost": {
+      "id": "5fd321b87333df5870acacbf",
+      "body": "This is another post",
+      "username": "User1",
+      "createdAt": "2020-12-11T07:37:28.788Z"
+    }
+  }
+}
+
+Result: Test successful
+
+5. Test Delete post 
+
+a. valid user 
+
+Input: 
+mutation deletePost{
+  deletePost (postId:"5fd325371bed8906d0f63f6d")
+}
+
+https: 
+
+  "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2YyNzY0NmRjODY1MjdjODJhZmI0OCIsImVtYWlsIjoidXNlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6IlVzZXIxIiwiaWF0IjoxNjA3NjcyMjA3LCJleHAiOjE2MDc2NzU4MDd9.u8emWDU2efSTzKa3komtUdlmkRcD5K5jjkoDsFK2UqE"}
+
+Output: 
+
+{
+  "data": {
+    "deletePost": "post deleted successfully"
+  }
+}
+
+
+b. Other user account: 
+
+Input: 
+mutation deletePost{
+  deletePost (postId:"5fd325371bed8906d0f63f6d")
+}
+
+http: 
+{
+  "Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmY2YyZTEyN2YyOGVhNThjYzAxOTBkZCIsImVtYWlsIjoidXNlckBlbWFpbC5jb20iLCJ1c2VybmFtZSI6ImNjc2FzY3pjIiwiaWF0IjoxNjA3NjczMjYwLCJleHAiOjE2MDc2NzY4NjB9.8TFTw_m3TTv9IccOGghu7FDyNrHwWwgU2x8kDOiJNqc"}
+
+Output: 
+{
+  "errors": [
+    {
+      "message": "TypeError: Cannot read property 'username' of null",
+      "locations": [...]
+
+Result: Test successful
