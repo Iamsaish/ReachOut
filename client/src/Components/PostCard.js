@@ -1,7 +1,9 @@
 import React, {useContext} from 'react';
 import {Card, Icon, Label, Image, Button, Popup} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
+
 import moment from 'moment'
+import '../App.css'
 
 import {AuthContext} from '../context/auth'
 import LikeButton from './LikeButton'
@@ -11,9 +13,9 @@ function PostCard ({post: {body, createdAt, id, username, likeCount, commentCoun
   const {user} = useContext(AuthContext);
 
     return(
-        
-    <Card fluid>
-      <Card.Content>
+    
+    <Card color='red' fluid>
+      <Card.Content className='cardbody'>
         <Image
           floated='right'
           size='mini'
@@ -25,7 +27,7 @@ function PostCard ({post: {body, createdAt, id, username, likeCount, commentCoun
           {body}
         </Card.Description>
       </Card.Content>
-      <Card.Content extra>
+      <Card.Content extra className='extrabg'>
         <LikeButton user={user} post ={{id , likes, likeCount}}/>
             <Popup 
             content='comment on post'

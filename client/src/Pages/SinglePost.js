@@ -31,6 +31,8 @@ export default function SinglePost(props) {
         }
     })
 
+
+
     function deletePostCallback(){
         props.history.push('/');
     }
@@ -108,6 +110,7 @@ export default function SinglePost(props) {
                                     onClick={submitComment}>
                                         Post
                                     </button>
+
                                 </div>
                             </Form>
                             </Card.Content>

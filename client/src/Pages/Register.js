@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {Button, Form} from 'semantic-ui-react'
+import {Button, Avatar, CssBaseline, TextField, Paper,  Grid, Typography, makeStyles} from '@material-ui/core'
 import {useMutation, gql} from '@apollo/client'
 
 import useForm from '../util/hooks'
@@ -32,25 +32,77 @@ export default function Register(props) {
         variables: values 
     })
 
+    const useStyles = makeStyles((theme) => ({
+      root: {
+        height: '70vh',
+      },
+      image: {
+        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor:
+          theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      },
+      paper: {
+        margin: theme.spacing(8, 4),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+      },
+      form: {
+        width: '80%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+      },
+      submit: {
+        margin: theme.spacing(3, 0, 2),
+      },
+    }));
+
+    const classes = useStyles();
+
     function registeruser(){
         addUser();
     }
 
     
     return (
-        <div className='form-container'>
-           <Form onSubmit={onSubmit} noValidate className={loading ? 'loading' : ''}>
-                <h1><b>Register Here to start Reaching</b></h1>
-                <Form.Input
-                label="Username"
-                placeholder="Username.."
+      <Grid container component="main" className={classes.root}>
+      <CssBaseline />
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            
+          </Avatar>
+          <Typography component="h1" variant="h5">
+              Register 
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="username"
                 name="username"
+                autoComplete="username"
+                autoFocus
                 type='text'
                 value={values.username}
                 error={errors.username ? true : false}
                 onChange={onChange}
-                />
-                <Form.Input
+              />
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
                 label="Email"
                 placeholder="Email.."
                 name="email"
@@ -59,7 +111,11 @@ export default function Register(props) {
                 error={errors.email ? true : false}
                 onChange={onChange}
                 />
-                <Form.Input
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
                 label="Password"
                 placeholder="Password.."
                 name="password"
@@ -68,7 +124,11 @@ export default function Register(props) {
                 error={errors.password ? true : false}
                 onChange={onChange}
                 />
-                <Form.Input
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
                 label="Confirm Password"
                 placeholder="Confirm Password.."
                 name="confirmpassword"
@@ -76,10 +136,6 @@ export default function Register(props) {
                 value={values.confirmpassword}
                 onChange={onChange}
                 />
-                <Button type="submit" primary>
-                    Register
-                </Button>
-           </Form> 
            {Object.keys(errors).length > 0 && (
              <div className="ui error message">
              <ul className="list">
@@ -89,8 +145,19 @@ export default function Register(props) {
              </ul>
          </div>
            )}
-
-        </div>
+           <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+        </form>
+      </div>
+      </Grid>
+    </Grid>
     )
 }
 

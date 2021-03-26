@@ -16,17 +16,19 @@ import AuthRoute from './util/AuthRoute';
 
 function App() {
   return (
-      <AuthProvider>
+    <Container>
+            <AuthProvider>
       <Router>
-        <Container>
           <MenuBar/>
-          <Route exact path='/' component={Home}/>
           <AuthRoute exact path='/login' component={Login}/>
           <AuthRoute exact path='/register' component={Register}/>
+          <Route exact path='/' component={Home}/>  
           <Route exact path='/posts/:postId' component={SinglePost}/>
-        </Container>
       </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Container>
+
+   
       );
 }
 
