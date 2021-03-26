@@ -12,11 +12,12 @@ export default function Home() {
     const { loading, data: { getPosts: posts } = {} } = useQuery(FETCH_POSTS_QUERY);
 
     return (
-        <Container>
-    <Grid columns={3} >
+    <Container >
+    <Grid columns={1}>
         <Grid.Row className='page-title'>
             <h1>Recent</h1>
         </Grid.Row>
+        <Grid.Column>
         <Grid.Row>
             {user && (
                 <GridColumn>
@@ -37,6 +38,8 @@ export default function Home() {
                 </Transition.Group>
             )}
         </Grid.Row>
+        </Grid.Column>
+        
     </Grid>
     </Container>
     );

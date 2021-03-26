@@ -52,6 +52,7 @@ export default function PostForm() {
                 </Button>
             </Form.Field>
         </Form>
+        <br/>
         {error && (
             <div className="ui error message" style={{marginBottom : 20}}>
                 <ul className="list">
